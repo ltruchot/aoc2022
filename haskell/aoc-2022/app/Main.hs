@@ -1,19 +1,43 @@
 module Main where
 
+import Control.Monad (foldM)
+import Data.Array (Array, assocs, listArray, (!))
+import Data.Maybe (fromMaybe)
 import qualified Day01.Solution01 as D01 (part1, part2)
 import qualified Day02.Solution02 as D02 (part1, part2)
+import qualified Day03.Solution03 as D03 (part1, part2)
 import TextFileHelper (fileLinesToList)
+
+type Part = [String] -> String
+
+data Solution = Solution
+  { inputFile :: String,
+    part1 :: Part,
+    part2 :: Part
+  }
+
+solutions :: Array Int Solution
+solutions =
+  listArray
+    (1, 3)
+    [ Solution {inputFile = "input01", part1 = D01.part1, part2 = D01.part2},
+      Solution {inputFile = "input02", part1 = D02.part1, part2 = D02.part2},
+      Solution {inputFile = "input03", part1 = D03.part1, part2 = D03.part2}
+    ]
+
+getPartSolution :: (Int, Int) -> IO [String] -> Part -> IO ()
+getPartSolution (dayNb, partNb) strLines part = do
+  let msg = "Day " ++ show dayNb ++ "/part " ++ show partNb ++ " result: "
+  let greenInConsole str = "\x1b[32m" ++ str ++ "\x1b[0m"
+  let result = (++) msg . greenInConsole . part <$> strLines
+  result >>= putStrLn
+
+getDaySolution :: (Int, Solution) -> IO ()
+getDaySolution (index, solution) = do
+  let strLines = fileLinesToList ("./data/" ++ inputFile solution)
+  getPartSolution (index, 1) strLines (part1 solution)
+  getPartSolution (index, 2) strLines (part2 solution)
 
 main :: IO ()
 main = do
-  let data1 = fileLinesToList "./data/input01"
-  let day01 = D01.part1 <$> data1
-  day01 >>= putStrLn
-  let day01' = D01.part2 <$> data1
-  day01' >>= putStrLn
-
-  let data2 = fileLinesToList "./data/input02"
-  let day02 = D02.part1 <$> data2
-  day02 >>= putStrLn
-  let day02' = D02.part2 <$> data2
-  day02' >>= putStrLn
+  foldM (\_ cur -> getDaySolution cur) () (assocs solutions)
