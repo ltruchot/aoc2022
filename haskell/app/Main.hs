@@ -30,9 +30,11 @@ solutions =
 getPartSolution :: (Int, Int) -> IO [String] -> Part -> IO ()
 getPartSolution (dayNb, partNb) strLines part = do
   let msg = "Day " ++ show dayNb ++ "/part " ++ show partNb ++ " result: "
-  let greenInConsole str = "\x1b[32m" ++ str ++ "\x1b[0m"
   let result = (++) msg . greenInConsole . part <$> strLines
   result >>= putStrLn
+
+greenInConsole :: String -> String
+greenInConsole str = "\x1b[32m" ++ str ++ "\x1b[0m"
 
 getDaySolution :: (Int, Solution) -> IO ()
 getDaySolution (index, solution) = do
