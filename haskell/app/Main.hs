@@ -7,6 +7,7 @@ import qualified Day01.Solution01 as D01 (part1, part2)
 import qualified Day02.Solution02 as D02 (part1, part2)
 import qualified Day03.Solution03 as D03 (part1, part2)
 import qualified Day04.Solution04 as D04 (part1, part2)
+import qualified Day05.Solution05 as D05 (part1, part2)
 import TextFileHelper (fileLinesToList)
 
 type Part = [String] -> String
@@ -24,7 +25,8 @@ solutions =
     [ Solution {inputFile = "input01", part1 = D01.part1, part2 = D01.part2},
       Solution {inputFile = "input02", part1 = D02.part1, part2 = D02.part2},
       Solution {inputFile = "input03", part1 = D03.part1, part2 = D03.part2},
-      Solution {inputFile = "input04", part1 = D04.part1, part2 = D04.part2}
+      Solution {inputFile = "input04", part1 = D04.part1, part2 = D04.part2},
+      Solution {inputFile = "input05", part1 = D05.part1, part2 = D05.part2}
     ]
 
 getPartSolution :: (Int, Int) -> IO [String] -> Part -> IO ()
